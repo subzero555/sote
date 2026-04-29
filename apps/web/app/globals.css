@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --green:        #1c6b3a;
+    --green-mid:    #2d9e57;
+    --green-light:  #a8e6c1;
+    --green-pale:   #e8f5ed;
+    --gold:         #c8860a;
+    --gold-light:   #f5c842;
+    --gold-pale:    #fdf3e0;
+    --cream:        #f7f3ee;
+    --ink:          #1a1510;
+    --ink2:         #3d3530;
+    --muted:        #9a8878;
+    --border:       #e2d9cf;
+    --white:        #ffffff;
+    --red:          #c0392b;
+    --warm:         #e8621a;
+    --warm-pale:    #fdeee6;
+    --purple:       #7b2d8b;
+    --purple-pale:  #f3e8fb;
+    --teal:         #0e7490;
+    --teal-pale:    #e0f2f7;
+    --barter:       #b45309;
+    --barter-pale:  #fef3c7;
+    --barter-mid:   #d97706;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-epilogue), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    /* Mobile: max width centered like an app */
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+  }
+}
