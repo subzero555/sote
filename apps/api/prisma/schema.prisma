@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────
+
+enum ListingMode {
+  TRADE
+  BARTER
+  GIFT
+  DONATE
+  MEAL
+}
+
+enum ListingStatus {
+  ACTIVE
+  PENDING
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum ExchangeStatus {
+  PROPOSED
+  ACCEPTED
+  CONFIRMED
+  COMPLETED
+  DISPUTED
+  CANCELLED
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+// ─────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────
+
+model User {
+  id                 String             @id @default(cuid())
+  phone              String             @unique
+  name               String?
+  avatarInitials     String?
+  neighbourhood      String?
+  latitude           Float?
+  longitude          Float?
+  radiusKm           Float              @default(3.0)
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  nationalId         String?
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  tradeScore         Int                @default(0)
+  barterScore        Int                @default(0)
+  giveScore          Int                @default(0)
+  totalDeals         Int                @default(0)
+  rating             Float              @default(0.0)
+
+  listings           Listing[]
+  exchangesInitiated Exchange[]         @relation("InitiatedExchanges")
+  exchangesReceived  Exchange[]         @relation("ReceivedExchanges")
+  reviewsGiven       Review[]           @relation("ReviewsGiven")
+  reviewsReceived    Review[]           @relation("ReviewsReceived")
+  otps               Otp[]
+
+  @@map("sote_users")
+}
+
+// ─────────────────────────────────────────
+// OTP
+// ─────────────────────────────────────────
+
+model Otp {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [phone], references: [phone])
+
+  @@map("sote_otps")
+}
+
+// ─────────────────────────────────────────
+// LISTING
+// ─────────────────────────────────────────
+
+model Listing {
+  id                  String        @id @default(cuid())
+  mode                ListingMode
+  status              ListingStatus @default(ACTIVE)
+  title               String
+  description         String?
+  category            String
+  emoji               String        @default("📦")
+  images              String[]      @default([])
+
+  price               Float?
+
+  wantedItem          String?
+  myEstimatedValue    Float?
+  theirEstimatedValue Float?
+
+  expiresAt           DateTime?
+  portions            Int?
+
+  neighbourhood       String?
+  latitude            Float?
+  longitude           Float?
+  meetupHint          String?
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  userId              String
+  user                User          @relation(fields: [userId], references: [id])
+  exchanges           Exchange[]
+
+  @@map("sote_listings")
+}
+
+// ─────────────────────────────────────────
+// EXCHANGE
+// ─────────────────────────────────────────
+
+model Exchange {
+  id              String         @id @default(cuid())
+  status          ExchangeStatus @default(PROPOSED)
+  message         String?
+
+  listingId       String
+  listing         Listing        @relation(fields: [listingId], references: [id])
+
+  initiatorId     String
+  initiator       User           @relation("InitiatedExchanges", fields: [initiatorId], references: [id])
+
+  receiverId      String
+  receiver        User           @relation("ReceivedExchanges", fields: [receiverId], references: [id])
+
+  counterItem     String?
+  counterEstimate Float?
+
+  safeSpotId      String?
+  agreedAt        DateTime?
+  completedAt     DateTime?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  reviews         Review[]
+
+  @@map("sote_exchanges")
+}
+
+// ─────────────────────────────────────────
+// REVIEW
+// ─────────────────────────────────────────
+
+model Review {
+  id         String      @id @default(cuid())
+  rating     Int
+  comment    String?
+  mode       ListingMode
+
+  reviewerId String
+  reviewer   User        @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+
+  revieweeId String
+  reviewee   User        @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+
+  exchangeId String
+  exchange   Exchange    @relation(fields: [exchangeId], references: [id])
+
+  createdAt  DateTime    @default(now())
+
+  @@map("sote_reviews")
+}
+
+// ─────────────────────────────────────────
+// SAFE SPOT
+// ─────────────────────────────────────────
+
+model SafeSpot {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  latitude      Float
+  longitude     Float
+  neighbourhood String?
+  votes         Int      @default(0)
+  meetupCount   Int      @default(0)
+  rating        Float    @default(0.0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  @@map("sote_safe_spots")
+}
