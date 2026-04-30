@@ -41,7 +41,7 @@ router.post(
               { quality: 'auto', fetch_format: 'auto' },
             ],
           },
-          (error, result) => {
+          (error: any, result: any) => {
             if (error) reject(error)
             else resolve(result)
           }
@@ -83,7 +83,7 @@ router.post(
               { quality: 'auto', fetch_format: 'auto' },
             ],
           },
-          (error, result) => {
+          (error: any, result: any) => {
             if (error) reject(error)
             else resolve(result)
           }
