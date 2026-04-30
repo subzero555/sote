@@ -2,16 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, ArrowLeftRight, Plus, Heart, User } from 'lucide-react'
+import { Home, ArrowLeftRight, Plus, Heart, User, Inbox } from 'lucide-react'
 
 const tabs = [
-  { href: '/feed',    icon: Home,            label: 'Home' },
-  { href: '/barter',  icon: ArrowLeftRight,  label: 'Barter' },
-  { href: '/post',    icon: null,            label: 'Post' },
-  { href: '/give',    icon: Heart,           label: 'Give' },
-  { href: '/profile', icon: User,            label: 'Profile' },
+  { href: '/feed',      icon: Home,           label: 'Home' },
+  { href: '/barter',   icon: ArrowLeftRight,  label: 'Barter' },
+  { href: '/post',     icon: null,            label: 'Post' },
+  { href: '/exchanges', icon: Inbox,          label: 'Inbox' },
+  { href: '/profile',  icon: User,            label: 'Profile' },
 ]
-
 export default function BottomNav() {
   const pathname = usePathname()
 

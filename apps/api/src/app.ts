@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import authRoutes from './routes/auth.routes'
 import listingsRoutes from './routes/listings.routes'
+import exchangesRoutes from './routes/exchanges.routes'
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.get('/health', (_req, res) => {
 
 app.use('/api/auth', authRoutes)
 app.use('/api/listings', listingsRoutes)
+app.use('/api/exchanges', exchangesRoutes)
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Route not found' })

@@ -1,4 +1,5 @@
 const API_URL = (process.env.NEXT_PUBLIC_API_URL as string) || 'http://localhost:4001'
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {}
@@ -64,4 +65,24 @@ export const api = {
 
   deleteListing: (id: string) =>
     apiFetch(`/api/listings/${id}`, { method: 'DELETE' }),
+
+  // Exchanges
+  createExchange: (data: {
+    listingId: string
+    message?: string
+    counterItem?: string
+    counterEstimate?: number
+  }) =>
+    apiFetch('/api/exchanges', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getMyExchanges: () => apiFetch('/api/exchanges/mine'),
+
+  updateExchangeStatus: (id: string, status: string) =>
+    apiFetch(`/api/exchanges/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
 }
