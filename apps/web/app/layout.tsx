@@ -1,32 +1,36 @@
 import type { Metadata, Viewport } from 'next'
-import { Fraunces, Epilogue } from 'next/font/google'
+import { Syne, Inter } from 'next/font/google'
 import './globals.css'
 
-const fraunces = Fraunces({
+const syne = Syne({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-syne',
+  weight: ['700', '800'],
   display: 'swap',
 })
 
-const epilogue = Epilogue({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-epilogue',
+  variable: '--font-inter',
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Sote — All of us',
-  description: "Kenya's hyperlocal neighbourhood marketplace",
+  title: 'Sote — You are not a stranger here.',
+  description: "Kenya's hyperlocal neighbourhood trust marketplace.",
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0f1f3d',
+  themeColor: '#1C1028',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${epilogue.variable}`}>
+    <html lang="en" className={`${syne.variable} ${inter.variable}`}>
       <body>{children}</body>
     </html>
   )

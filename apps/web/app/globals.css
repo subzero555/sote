@@ -4,33 +4,36 @@
 
 @layer base {
   :root {
-    --navy:        #0f1f3d;
-    --navy-mid:    #1a3158;
-    --navy-light:  #2a4a7a;
-    --navy-pale:   #e8edf8;
-    --gold:        #c8860a;
-    --gold-mid:    #e09b12;
-    --gold-light:  #f5c842;
-    --gold-pale:   #fdf3e0;
-    --cream:       #faf9f6;
-    --white:       #ffffff;
-    --ink:         #0f1f3d;
-    --ink2:        #3d4f6b;
-    --muted:       #7a8ba8;
-    --border:      #e2e8f4;
-    --barter:      #b45309;
-    --barter-pale: #fef3c7;
-    --gift:        #7b2d8b;
-    --gift-pale:   #f3e8fb;
-    --donate:      #c0392b;
-    --donate-pale: #fdeee6;
-    --meal:        #0e7490;
-    --meal-pale:   #e0f2f7;
-    --red:         #c0392b;
-    --green:       #1a6b3a;
-    --green-pale:  #e8f5ed;
-    --shadow:      0 4px 24px rgba(15,31,61,0.10);
-    --shadow-sm:   0 2px 12px rgba(15,31,61,0.07);
+    --violet:       #5B21B6;
+    --violet-mid:   #7C3AED;
+    --violet-light: #A78BFA;
+    --violet-pale:  #EDE9FE;
+    --cream:        #FDFBF7;
+    --cream-mid:    #F5F0E8;
+    --cream-dark:   #E8E0D0;
+    --ink:          #1C1028;
+    --ink2:         #3D2F52;
+    --muted:        #8B7BA8;
+    --border:       #E8E0F0;
+    --white:        #FFFFFF;
+    --barter:       #D97706;
+    --barter-pale:  #FEF3C7;
+    --gift:         #DB2777;
+    --gift-pale:    #FCE7F3;
+    --meal:         #0891B2;
+    --meal-pale:    #CFFAFE;
+    --trade:        #059669;
+    --trade-pale:   #D1FAE5;
+    --donate:       #DC2626;
+    --donate-pale:  #FEE2E2;
+    --red:          #DC2626;
+    --green:        #059669;
+    --green-pale:   #D1FAE5;
+    --gold:         #D97706;
+    --gold-light:   #FCD34D;
+    --gold-pale:    #FEF3C7;
+    --shadow:       0 4px 24px rgba(28,16,40,0.10);
+    --shadow-sm:    0 2px 12px rgba(28,16,40,0.07);
   }
 
   html { scroll-behavior: smooth; }
@@ -38,11 +41,12 @@
   body {
     background: var(--cream);
     color: var(--ink);
-    font-family: var(--font-epilogue), -apple-system, sans-serif;
+    font-family: var(--font-inter), -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    max-width: 480px;
-    margin: 0 auto;
-    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-syne), sans-serif;
   }
 }

@@ -11,13 +11,145 @@ import BottomNav from '@/components/layout/BottomNav'
 import { api } from '@/lib/api'
 
 const MODES = [
-  { key: 'all',    label: 'All',    Icon: Sparkles       },
-  { key: 'trade',  label: 'Trade',  Icon: ShoppingCart   },
-  { key: 'barter', label: 'Barter', Icon: ArrowLeftRight },
-  { key: 'gift',   label: 'Gifts',  Icon: Gift           },
-  { key: 'donate', label: 'Donate', Icon: Heart          },
+  { key: 'all',    label: 'All',    Icon: Sparkles        },
+  { key: 'trade',  label: 'Trade',  Icon: ShoppingCart    },
+  { key: 'barter', label: 'Barter', Icon: ArrowLeftRight  },
+  { key: 'gift',   label: 'Gifts',  Icon: Gift            },
+  { key: 'donate', label: 'Donate', Icon: Heart           },
   { key: 'meal',   label: 'Meals',  Icon: UtensilsCrossed },
 ]
+
+const WIDGET_PHOTOS = {
+  barter: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80',
+  gift:   'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80',
+  meal:   'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80',
+  trade:  'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80',
+}
+
+function Widget({
+  photo, overlayColor, label, title, sub, count, btnLabel, btnColor, tall, onClick, blink
+}: any) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setTimeout(() => setHovered(false), 300)}
+      style={{
+        borderRadius: '20px', overflow: 'hidden',
+        position: 'relative', cursor: 'pointer',
+        height: tall ? '248px' : '116px',
+        boxShadow: hovered
+          ? '0 8px 32px rgba(28,16,40,0.22)'
+          : 'var(--shadow)',
+        transition: 'box-shadow 0.3s',
+      }}
+    >
+      {/* Photo */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: `url(${photo})`,
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        filter: hovered ? 'brightness(0.25) saturate(0.7)' : 'brightness(0.85)',
+        transform: hovered ? 'scale(1.06)' : 'scale(1)',
+        transition: 'filter 0.35s ease, transform 0.35s ease',
+      }} />
+
+      {/* Overlay tint */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: overlayColor,
+        opacity: hovered ? 0 : 1,
+        transition: 'opacity 0.35s ease',
+      }} />
+
+      {/* Default content */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '14px 16px',
+        opacity: hovered ? 0 : 1,
+        transform: hovered ? 'translateY(6px)' : 'translateY(0)',
+        transition: 'opacity 0.28s ease, transform 0.28s ease',
+      }}>
+        {blink && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '5px',
+            fontSize: '9px', fontWeight: 600, textTransform: 'uppercase',
+            letterSpacing: '1px', color: 'rgba(255,255,255,0.6)',
+            marginBottom: '5px', fontFamily: 'var(--font-inter)',
+          }}>
+            <div style={{
+              width: '6px', height: '6px',
+              background: '#FCD34D', borderRadius: '50%',
+              animation: 'blink 1s infinite',
+            }} />
+            {label}
+          </div>
+        )}
+        {!blink && (
+          <div style={{
+            fontSize: '9px', fontWeight: 600, textTransform: 'uppercase',
+            letterSpacing: '1px', color: 'rgba(255,255,255,0.6)',
+            marginBottom: '5px', fontFamily: 'var(--font-inter)',
+          }}>
+            {label}
+          </div>
+        )}
+        <div style={{
+          fontFamily: 'var(--font-syne)',
+          fontSize: tall ? '18px' : '15px',
+          fontWeight: 700, color: 'white', lineHeight: 1.2,
+        }}>
+          {title}
+        </div>
+        {count && (
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', marginTop: '3px' }}>
+            {count}
+          </div>
+        )}
+      </div>
+
+      {/* Hover content */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        padding: '16px', textAlign: 'center',
+        opacity: hovered ? 1 : 0,
+        transition: 'opacity 0.3s ease',
+        gap: '8px',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-syne)',
+          fontSize: '16px', fontWeight: 700,
+          color: 'white', lineHeight: 1.3,
+        }}>
+          {title}
+        </div>
+        {sub && (
+          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
+            {sub}
+          </div>
+        )}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '5px',
+          background: 'white', color: btnColor || 'var(--violet)',
+          border: 'none', borderRadius: '50px',
+          padding: '9px 18px', fontSize: '13px', fontWeight: 700,
+          fontFamily: 'var(--font-inter)',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+          marginTop: '4px',
+        }}>
+          {btnLabel}
+          <ChevronRight size={13} strokeWidth={2.5} />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function FeedPage() {
   const router = useRouter()
@@ -55,37 +187,39 @@ export default function FeedPage() {
   const firstName = user?.name?.split(' ')[0] || 'Jirani'
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--cream)', paddingBottom: '88px' }}>
+    <div style={{
+      minHeight: '100vh', background: 'var(--cream)',
+      paddingBottom: '88px', maxWidth: '480px', margin: '0 auto',
+    }}>
 
-      {/* TopBar — Navy */}
+      {/* TopBar */}
       <div style={{
-        background: 'var(--navy)',
-        padding: '18px 20px 14px',
+        background: 'var(--ink)', padding: '16px 20px 12px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         position: 'sticky', top: 0, zIndex: 50,
       }}>
         <div>
           <div style={{
-            fontFamily: 'var(--font-fraunces)',
-            fontSize: '26px', fontWeight: 900,
-            color: 'var(--gold-light)',
-            letterSpacing: '-0.5px', lineHeight: 1,
+            fontFamily: 'var(--font-syne)',
+            fontSize: '26px', fontWeight: 800,
+            color: 'var(--violet-light)', letterSpacing: '-1px', lineHeight: 1,
           }}>
             Sote
           </div>
           <div style={{
-            fontSize: '11px', color: 'rgba(255,255,255,0.5)',
+            fontSize: '10px', color: 'rgba(255,255,255,0.35)',
             marginTop: '2px', display: 'flex', alignItems: 'center', gap: '3px',
+            fontStyle: 'italic', fontFamily: 'var(--font-inter)',
           }}>
-            <MapPin size={10} strokeWidth={2.5} />
-            {user?.neighbourhood || 'Nairobi'} · 3km radius
+            <MapPin size={9} strokeWidth={2.5} />
+            {user?.neighbourhood || 'Nairobi'} · 3km
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button onClick={() => router.push('/search')} style={{
             width: '36px', height: '36px',
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.12)',
             borderRadius: '10px', cursor: 'pointer', color: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
@@ -93,8 +227,8 @@ export default function FeedPage() {
           </button>
           <button onClick={() => router.push('/notifications')} style={{
             width: '36px', height: '36px',
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.12)',
             borderRadius: '10px', cursor: 'pointer', color: 'white',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             position: 'relative',
@@ -102,9 +236,8 @@ export default function FeedPage() {
             <Bell size={16} strokeWidth={2} />
             <div style={{
               position: 'absolute', top: '7px', right: '7px',
-              width: '7px', height: '7px',
-              background: 'var(--gold-light)', borderRadius: '50%',
-              border: '2px solid rgba(255,255,255,0.15)',
+              width: '6px', height: '6px',
+              background: 'var(--violet-light)', borderRadius: '50%',
             }} />
           </button>
         </div>
@@ -115,8 +248,7 @@ export default function FeedPage() {
         background: 'var(--white)', padding: '10px 16px',
         display: 'flex', gap: '6px', overflowX: 'auto',
         borderBottom: '1px solid var(--border)',
-        scrollbarWidth: 'none',
-        position: 'sticky', top: '64px', zIndex: 40,
+        scrollbarWidth: 'none', position: 'sticky', top: '62px', zIndex: 40,
       }}>
         {MODES.map((m) => {
           const Icon = m.Icon
@@ -125,13 +257,13 @@ export default function FeedPage() {
             <button key={m.key} onClick={() => setMode(m.key)} style={{
               display: 'flex', alignItems: 'center', gap: '5px',
               padding: '6px 14px', borderRadius: '50px',
-              fontSize: '12px', fontWeight: 600,
-              cursor: 'pointer', border: '1.5px solid',
-              whiteSpace: 'nowrap', flexShrink: 0,
-              background: isActive ? 'var(--navy)' : 'transparent',
-              borderColor: isActive ? 'var(--navy)' : 'var(--border)',
+              fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+              border: '1.5px solid', whiteSpace: 'nowrap', flexShrink: 0,
+              background: isActive ? 'var(--violet)' : 'transparent',
+              borderColor: isActive ? 'var(--violet)' : 'var(--border)',
               color: isActive ? 'white' : 'var(--muted)',
               transition: 'all 0.18s',
+              fontFamily: 'var(--font-inter)',
             }}>
               <Icon size={11} strokeWidth={2.5} />
               {m.label}
@@ -143,212 +275,144 @@ export default function FeedPage() {
       {/* Greeting */}
       <div style={{ padding: '16px 20px 0' }}>
         <div style={{
-          fontFamily: 'var(--font-fraunces)',
-          fontSize: '20px', fontWeight: 800, color: 'var(--navy)',
+          fontFamily: 'var(--font-syne)',
+          fontSize: '20px', fontWeight: 700, color: 'var(--ink)',
         }}>
-          Habari, {firstName} 👋
+          Habari, {firstName}
         </div>
-        <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '2px' }}>
+        <div style={{
+          fontSize: '13px', color: 'var(--muted)', marginTop: '2px',
+          fontFamily: 'var(--font-inter)',
+        }}>
           {total > 0 ? `${total} active listings near you` : 'Be the first to post in your area'}
         </div>
       </div>
 
-      {/* Stats strip — navy background */}
+      {/* Stats strip */}
       <div style={{
         display: 'flex', margin: '14px 16px 0',
-        background: 'var(--navy)', borderRadius: '14px', overflow: 'hidden',
+        background: 'var(--ink)', borderRadius: '14px', overflow: 'hidden',
       }}>
         {[
-          { label: 'Trade',  value: stats.trade,  Icon: ShoppingCart  },
-          { label: 'Barter', value: stats.barter, Icon: ArrowLeftRight },
-          { label: 'Gifts',  value: stats.gift,   Icon: Gift           },
-          { label: 'Donate', value: stats.donate, Icon: Heart          },
-          { label: 'Meals',  value: stats.meal,   Icon: UtensilsCrossed },
-        ].map((s, i, arr) => {
-          const Icon = s.Icon
-          return (
-            <div key={s.label} onClick={() => setMode(s.label.toLowerCase())} style={{
-              flex: 1, padding: '12px 4px', textAlign: 'center',
-              borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-              cursor: 'pointer',
+          { label: 'Trade',  value: stats.trade  },
+          { label: 'Barter', value: stats.barter },
+          { label: 'Gifts',  value: stats.gift   },
+          { label: 'Donate', value: stats.donate },
+          { label: 'Meals',  value: stats.meal   },
+        ].map((s, i, arr) => (
+          <div key={s.label} onClick={() => setMode(s.label.toLowerCase())} style={{
+            flex: 1, padding: '12px 4px', textAlign: 'center',
+            borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+            cursor: 'pointer',
+          }}>
+            <div style={{
+              fontFamily: 'var(--font-syne)',
+              fontSize: '18px', fontWeight: 800,
+              color: 'var(--violet-light)', lineHeight: 1, marginBottom: '2px',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3px' }}>
-                <Icon size={12} strokeWidth={2} color="rgba(255,255,255,0.45)" />
-              </div>
-              <div style={{
-                fontFamily: 'var(--font-fraunces)',
-                fontSize: '18px', fontWeight: 900,
-                color: 'var(--gold-light)', lineHeight: 1, marginBottom: '2px',
-              }}>
-                {s.value}
-              </div>
-              <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
-                {s.label}
-              </div>
+              {s.value}
             </div>
-          )
-        })}
+            <div style={{
+              fontSize: '9px', color: 'rgba(255,255,255,0.35)',
+              fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px',
+              fontFamily: 'var(--font-inter)',
+            }}>
+              {s.label}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Widget grid */}
+      {/* Widgets */}
       {mode === 'all' && (
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '10px',
-          padding: '14px 16px 0',
+          display: 'grid', gridTemplateColumns: '1fr 1fr',
+          gap: '10px', padding: '14px 16px 0',
         }}>
-          {/* Barter — tall left */}
           {stats.barter > 0 && (
-            <div
+            <Widget
+              photo={WIDGET_PHOTOS.barter}
+              overlayColor="linear-gradient(180deg,rgba(120,53,15,0.15) 0%,rgba(120,53,15,0.88) 100%)"
+              label="Barter Exchange"
+              title="Trade without cash"
+              sub="Exchange goods with verified neighbours"
+              count={`${stats.barter} near you`}
+              btnLabel="Explore Barter"
+              btnColor="var(--barter)"
+              tall={true}
               onClick={() => setMode('barter')}
-              style={{
-                gridRow: 'span 2',
-                background: 'linear-gradient(160deg, #92400e 0%, #b45309 100%)',
-                borderRadius: '20px', padding: '20px',
-                cursor: 'pointer', position: 'relative', overflow: 'hidden',
-                minHeight: '240px',
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                boxShadow: 'var(--shadow)',
-              }}
-            >
-              <div style={{
-                position: 'absolute', right: '-20px', bottom: '-20px',
-                opacity: 0.1,
-              }}>
-                <ArrowLeftRight size={100} strokeWidth={1} color="white" />
-              </div>
-              <div>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-                  Barter Exchange
-                </div>
-                <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '22px', fontWeight: 900, color: 'white', lineHeight: 1.2, marginBottom: '8px' }}>
-                  Trade without cash
-                </div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>
-                  Exchange goods with verified neighbours
-                </div>
-              </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '40px', fontWeight: 900, color: 'white', lineHeight: 1, marginBottom: '4px' }}>
-                  {stats.barter}
-                </div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '12px' }}>
-                  exchanges available
-                </div>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '5px',
-                  background: 'rgba(255,255,255,0.15)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '50px', padding: '7px 14px',
-                  fontSize: '12px', fontWeight: 700, color: 'white',
-                }}>
-                  Explore <ChevronRight size={12} strokeWidth={2.5} />
-                </div>
-              </div>
-            </div>
+            />
           )}
 
-          {/* Gift widget — top right */}
-          {(stats.gift > 0 || stats.donate > 0) && (
-            <div
-              onClick={() => router.push('/give')}
-              style={{
-                background: 'linear-gradient(160deg, #4a1870 0%, #7b2d8b 100%)',
-                borderRadius: '20px', padding: '18px',
-                cursor: 'pointer', position: 'relative', overflow: 'hidden',
-                boxShadow: 'var(--shadow)',
-                minHeight: '110px',
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-              }}
-            >
-              <div style={{
-                position: 'absolute', right: '-10px', bottom: '-10px', opacity: 0.12,
-              }}>
-                <Gift size={64} strokeWidth={1} color="white" />
-              </div>
-              <div>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '5px' }}>
-                  Community
-                </div>
-                <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '17px', fontWeight: 900, color: 'white', lineHeight: 1.2 }}>
-                  {stats.gift + stats.donate} free<br/>items
-                </div>
-              </div>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px',
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '50px', padding: '5px 12px',
-                fontSize: '11px', fontWeight: 700, color: 'white',
-                alignSelf: 'flex-start',
-              }}>
-                See gifts <ChevronRight size={10} strokeWidth={2.5} />
-              </div>
-            </div>
-          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {(stats.gift > 0 || stats.donate > 0) && (
+              <Widget
+                photo={WIDGET_PHOTOS.gift}
+                overlayColor="linear-gradient(180deg,rgba(157,23,77,0.15) 0%,rgba(157,23,77,0.88) 100%)"
+                label="Community"
+                title={`${stats.gift + stats.donate} free items`}
+                sub="Gifts and donations from your neighbours"
+                btnLabel="See Gifts"
+                btnColor="var(--gift)"
+                onClick={() => router.push('/give')}
+              />
+            )}
+            {stats.meal > 0 && (
+              <Widget
+                photo={WIDGET_PHOTOS.meal}
+                overlayColor="linear-gradient(180deg,rgba(7,89,133,0.15) 0%,rgba(7,89,133,0.88) 100%)"
+                label="Meals Now"
+                title="Hot food nearby"
+                sub="Collect before it expires — always free"
+                btnLabel="Collect Now"
+                btnColor="var(--meal)"
+                blink={true}
+                onClick={() => setMode('meal')}
+              />
+            )}
+            {total === 0 && (
+              <Widget
+                photo={WIDGET_PHOTOS.trade}
+                overlayColor="linear-gradient(180deg,rgba(91,33,182,0.15) 0%,rgba(91,33,182,0.88) 100%)"
+                label="Get Started"
+                title="Post your first listing"
+                sub="Start the community in your neighbourhood"
+                btnLabel="Post Now"
+                btnColor="var(--violet)"
+                onClick={() => router.push('/post')}
+              />
+            )}
+          </div>
 
-          {/* Meal widget — bottom right */}
-          {stats.meal > 0 && (
-            <div
-              onClick={() => setMode('meal')}
-              style={{
-                background: 'linear-gradient(160deg, #0a5a6e 0%, #0e7490 100%)',
-                borderRadius: '20px', padding: '18px',
-                cursor: 'pointer', position: 'relative', overflow: 'hidden',
-                boxShadow: 'var(--shadow)',
-                minHeight: '110px',
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-              }}
-            >
-              <div>
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.55)',
-                  textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '5px',
-                }}>
-                  <div style={{ width: '6px', height: '6px', background: 'var(--gold-light)', borderRadius: '50%', animation: 'blink 1s infinite' }} />
-                  Meals Now
-                </div>
-                <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '17px', fontWeight: 900, color: 'white', lineHeight: 1.2 }}>
-                  {stats.meal} hot<br/>meal{stats.meal > 1 ? 's' : ''}
-                </div>
-              </div>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px',
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '50px', padding: '5px 12px',
-                fontSize: '11px', fontWeight: 700, color: 'white',
-                alignSelf: 'flex-start',
-              }}>
-                Collect <ChevronRight size={10} strokeWidth={2.5} />
-              </div>
-            </div>
-          )}
-
-          {/* Empty state widget */}
-          {total === 0 && (
+          {total === 0 && !stats.barter && (
             <div
               onClick={() => router.push('/post')}
               style={{
                 gridColumn: 'span 2',
-                background: 'var(--navy)',
+                background: 'var(--violet)',
                 borderRadius: '20px', padding: '24px',
                 cursor: 'pointer', position: 'relative', overflow: 'hidden',
                 boxShadow: 'var(--shadow)',
               }}
             >
-              <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '20px', fontWeight: 900, color: 'white', marginBottom: '6px' }}>
-                Start the community
+              <div style={{
+                fontFamily: 'var(--font-syne)',
+                fontSize: '20px', fontWeight: 800, color: 'white', marginBottom: '6px',
+              }}>
+                You are not a stranger here.
               </div>
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
-                Be the first to post in your neighbourhood
+              <div style={{
+                fontSize: '13px', color: 'rgba(255,255,255,0.6)',
+                marginBottom: '16px', fontFamily: 'var(--font-inter)',
+              }}>
+                Start your neighbourhood community today
               </div>
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
-                background: 'var(--gold)', borderRadius: '50px',
-                padding: '10px 20px', fontSize: '14px', fontWeight: 700, color: 'white',
+                background: 'white', color: 'var(--violet)',
+                border: 'none', borderRadius: '50px',
+                padding: '10px 20px', fontSize: '14px', fontWeight: 700,
+                fontFamily: 'var(--font-inter)', cursor: 'pointer',
               }}>
                 <Zap size={14} strokeWidth={2.5} />
                 Post something
@@ -364,30 +428,38 @@ export default function FeedPage() {
           padding: '20px 20px 10px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '16px', fontWeight: 700, color: 'var(--navy)' }}>
+          <div style={{
+            fontFamily: 'var(--font-syne)', fontSize: '16px',
+            fontWeight: 700, color: 'var(--ink)',
+          }}>
             {mode === 'all' ? 'Near You Now' : `${MODES.find(m => m.key === mode)?.label} listings`}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
+          <div style={{
+            fontSize: '12px', color: 'var(--muted)',
+            fontFamily: 'var(--font-inter)',
+          }}>
             {listings.length} {listings.length === 1 ? 'item' : 'items'}
           </div>
         </div>
       )}
 
       {/* Cards */}
-      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
+      <div style={{
+        padding: '0 16px', display: 'flex',
+        flexDirection: 'column', gap: '10px', marginBottom: '24px',
+      }}>
         {loading ? (
           [1, 2, 3].map(i => (
             <div key={i} style={{
               background: 'var(--white)', borderRadius: '16px',
-              border: '1px solid var(--border)', padding: '14px 16px',
-              display: 'flex', gap: '12px',
-              opacity: 0.6,
+              border: '1px solid var(--border)', overflow: 'hidden',
+              display: 'flex', opacity: 0.5,
             }}>
-              <div style={{ width: '88px', height: '96px', borderRadius: '12px', background: 'var(--border)' }} />
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
-                <div style={{ height: '14px', background: 'var(--border)', borderRadius: '6px', width: '70%' }} />
-                <div style={{ height: '11px', background: 'var(--border)', borderRadius: '6px', width: '40%' }} />
-                <div style={{ height: '16px', background: 'var(--border)', borderRadius: '6px', width: '30%' }} />
+              <div style={{ width: '88px', height: '96px', background: 'var(--cream-dark)' }} />
+              <div style={{ flex: 1, padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ height: '14px', background: 'var(--cream-dark)', borderRadius: '6px', width: '70%' }} />
+                <div style={{ height: '11px', background: 'var(--cream-dark)', borderRadius: '6px', width: '40%' }} />
+                <div style={{ height: '16px', background: 'var(--cream-dark)', borderRadius: '6px', width: '30%' }} />
               </div>
             </div>
           ))
@@ -395,16 +467,21 @@ export default function FeedPage() {
           <div style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--muted)' }}>
             <div style={{
               width: '56px', height: '56px', borderRadius: '16px',
-              background: 'var(--navy-pale)',
+              background: 'var(--violet-pale)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 12px',
             }}>
-              <Sparkles size={26} color="var(--navy)" strokeWidth={1.5} />
+              <Sparkles size={26} color="var(--violet)" strokeWidth={1.5} />
             </div>
-            <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '16px', fontWeight: 700, color: 'var(--navy)', marginBottom: '6px' }}>
+            <div style={{
+              fontFamily: 'var(--font-syne)', fontSize: '16px',
+              fontWeight: 700, color: 'var(--ink)', marginBottom: '6px',
+            }}>
               Nothing here yet
             </div>
-            <div style={{ fontSize: '14px' }}>Be the first to post in this category</div>
+            <div style={{ fontSize: '14px', fontFamily: 'var(--font-inter)' }}>
+              Be the first to post in this category
+            </div>
           </div>
         ) : (
           listings.map((listing, i) => (
@@ -420,6 +497,7 @@ export default function FeedPage() {
       <style>{`
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
         @keyframes cardIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        ::-webkit-scrollbar { display: none; }
       `}</style>
     </div>
   )
