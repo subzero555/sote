@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
@@ -35,7 +37,6 @@
     font-family: var(--font-epilogue), sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    /* Mobile: max width centered like an app */
     max-width: 480px;
     margin: 0 auto;
     min-height: 100vh;
