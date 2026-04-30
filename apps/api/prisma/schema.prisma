@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─────────────────────────────────────────
-// ENUMS
-// ─────────────────────────────────────────
-
 enum ListingMode {
   TRADE
   BARTER
@@ -43,10 +39,6 @@ enum VerificationStatus {
   REJECTED
 }
 
-// ─────────────────────────────────────────
-// USER
-// ─────────────────────────────────────────
-
 model User {
   id                 String             @id @default(cuid())
   phone              String             @unique
@@ -73,14 +65,9 @@ model User {
   exchangesReceived  Exchange[]         @relation("ReceivedExchanges")
   reviewsGiven       Review[]           @relation("ReviewsGiven")
   reviewsReceived    Review[]           @relation("ReviewsReceived")
-  otps               Otp[]
 
   @@map("sote_users")
 }
-
-// ─────────────────────────────────────────
-// OTP
-// ─────────────────────────────────────────
 
 model Otp {
   id        String   @id @default(cuid())
@@ -90,14 +77,8 @@ model Otp {
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  user      User?    @relation(fields: [phone], references: [phone])
-
   @@map("sote_otps")
 }
-
-// ─────────────────────────────────────────
-// LISTING
-// ─────────────────────────────────────────
 
 model Listing {
   id                  String        @id @default(cuid())
@@ -110,11 +91,9 @@ model Listing {
   images              String[]      @default([])
 
   price               Float?
-
   wantedItem          String?
   myEstimatedValue    Float?
   theirEstimatedValue Float?
-
   expiresAt           DateTime?
   portions            Int?
 
@@ -132,10 +111,6 @@ model Listing {
 
   @@map("sote_listings")
 }
-
-// ─────────────────────────────────────────
-// EXCHANGE
-// ─────────────────────────────────────────
 
 model Exchange {
   id              String         @id @default(cuid())
@@ -166,10 +141,6 @@ model Exchange {
   @@map("sote_exchanges")
 }
 
-// ─────────────────────────────────────────
-// REVIEW
-// ─────────────────────────────────────────
-
 model Review {
   id         String      @id @default(cuid())
   rating     Int
@@ -189,10 +160,6 @@ model Review {
 
   @@map("sote_reviews")
 }
-
-// ─────────────────────────────────────────
-// SAFE SPOT
-// ─────────────────────────────────────────
 
 model SafeSpot {
   id            String   @id @default(cuid())
