@@ -5,14 +5,15 @@ import TopBar from '@/components/layout/TopBar'
 import BottomNav from '@/components/layout/BottomNav'
 import ListingCard from '@/components/listings/ListingCard'
 import { api } from '@/lib/api'
+import { Sparkles, ShoppingCart, ArrowLeftRight, Gift, Heart, UtensilsCrossed, Building2 } from 'lucide-react'
 
 const MODES = [
-  { key: 'all',    label: '✨ All' },
-  { key: 'trade',  label: '🛒 Trade' },
-  { key: 'barter', label: '🔄 Barter' },
-  { key: 'gift',   label: '🎁 Gifts' },
-  { key: 'donate', label: '❤️ Donate' },
-  { key: 'meal',   label: '🍽️ Meals' },
+  { key: 'all',    label: 'All',    Icon: Sparkles },
+  { key: 'trade',  label: 'Trade',  Icon: ShoppingCart },
+  { key: 'barter', label: 'Barter', Icon: ArrowLeftRight },
+  { key: 'gift',   label: 'Gifts',  Icon: Gift },
+  { key: 'donate', label: 'Donate', Icon: Heart },
+  { key: 'meal',   label: 'Meals',  Icon: UtensilsCrossed },
 ]
 
 const modeActiveColors: Record<string, string> = {
@@ -23,6 +24,14 @@ const modeActiveColors: Record<string, string> = {
   donate: 'var(--warm)',
   meal:   'var(--teal)',
 }
+
+const STATS = [
+  { label: 'Trade',  key: 'trade',  color: 'var(--green)',  Icon: ShoppingCart },
+  { label: 'Barter', key: 'barter', color: 'var(--barter)', Icon: ArrowLeftRight },
+  { label: 'Gifts',  key: 'gift',   color: 'var(--purple)', Icon: Gift },
+  { label: 'Donate', key: 'donate', color: 'var(--warm)',   Icon: Heart },
+  { label: 'Meals',  key: 'meal',   color: 'var(--teal)',   Icon: UtensilsCrossed },
+]
 
 export default function FeedPage() {
   const [mode, setMode] = useState('all')
@@ -73,25 +82,29 @@ export default function FeedPage() {
         zIndex: 40,
         scrollbarWidth: 'none',
       }}>
-        {MODES.map((m) => (
-          <button key={m.key} onClick={() => setMode(m.key)} style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            padding: '8px 16px',
-            borderRadius: '50px',
-            fontSize: '13px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            border: '1.5px solid',
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-            transition: 'all 0.2s',
-            background: mode === m.key ? modeActiveColors[m.key] : 'transparent',
-            borderColor: mode === m.key ? modeActiveColors[m.key] : 'var(--border)',
-            color: mode === m.key ? 'white' : 'var(--muted)',
-          }}>
-            {m.label}
-          </button>
-        ))}
+        {MODES.map((m) => {
+          const Icon = m.Icon
+          return (
+            <button key={m.key} onClick={() => setMode(m.key)} style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '8px 16px',
+              borderRadius: '50px',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              border: '1.5px solid',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              transition: 'all 0.2s',
+              background: mode === m.key ? modeActiveColors[m.key] : 'transparent',
+              borderColor: mode === m.key ? modeActiveColors[m.key] : 'var(--border)',
+              color: mode === m.key ? 'white' : 'var(--muted)',
+            }}>
+              <Icon size={13} strokeWidth={2.5} />
+              {m.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Stats strip */}
@@ -103,29 +116,30 @@ export default function FeedPage() {
         border: '1px solid var(--border)',
         overflow: 'hidden',
       }}>
-        {[
-          { label: 'Trade',  value: stats.trade,  color: 'var(--green)' },
-          { label: 'Barter', value: stats.barter, color: 'var(--barter)' },
-          { label: 'Gifts',  value: stats.gift,   color: 'var(--purple)' },
-          { label: 'Donate', value: stats.donate, color: 'var(--warm)' },
-          { label: 'Meals',  value: stats.meal,   color: 'var(--teal)' },
-        ].map((s, i, arr) => (
-          <div key={s.label} style={{
-            flex: 1, padding: '12px 6px', textAlign: 'center',
-            borderRight: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
-          }}>
-            <div style={{
-              fontFamily: 'var(--font-fraunces)',
-              fontSize: '19px', fontWeight: 900,
-              color: s.color, lineHeight: 1, marginBottom: '3px',
+        {STATS.map((s, i) => {
+          const Icon = s.Icon
+          const value = stats[s.key as keyof typeof stats]
+          return (
+            <div key={s.label} style={{
+              flex: 1, padding: '12px 6px', textAlign: 'center',
+              borderRight: i < STATS.length - 1 ? '1px solid var(--border)' : 'none',
             }}>
-              {s.value}
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4px' }}>
+                <Icon size={14} strokeWidth={2} color={s.color} />
+              </div>
+              <div style={{
+                fontFamily: 'var(--font-fraunces)',
+                fontSize: '19px', fontWeight: 900,
+                color: s.color, lineHeight: 1, marginBottom: '3px',
+              }}>
+                {value}
+              </div>
+              <div style={{ fontSize: '9px', color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                {s.label}
+              </div>
             </div>
-            <div style={{ fontSize: '9px', color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-              {s.label}
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Feed */}
@@ -140,12 +154,31 @@ export default function FeedPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '0 16px', marginBottom: '24px' }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>
-            Loading...
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+              <div style={{
+                width: '48px', height: '48px',
+                borderRadius: '12px',
+                background: 'var(--green-pale)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Sparkles size={24} color="var(--green)" strokeWidth={1.5} />
+              </div>
+            </div>
+            <div style={{ fontSize: '14px' }}>Loading...</div>
           </div>
         ) : listings.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>
-            <div style={{ fontSize: '32px', marginBottom: '12px' }}>🏘️</div>
-            <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '16px', fontWeight: 700, marginBottom: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+              <div style={{
+                width: '56px', height: '56px',
+                borderRadius: '16px',
+                background: 'var(--green-pale)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Building2 size={28} color="var(--green)" strokeWidth={1.5} />
+              </div>
+            </div>
+            <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: '16px', fontWeight: 700, marginBottom: '6px', color: 'var(--ink)' }}>
               Nothing here yet
             </div>
             <div style={{ fontSize: '14px' }}>Be the first to post in your neighbourhood</div>

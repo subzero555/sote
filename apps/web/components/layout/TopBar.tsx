@@ -1,5 +1,7 @@
 'use client'
 
+import { Search, Bell, MapPin } from 'lucide-react'
+
 interface TopBarProps {
   neighbourhood?: string
 }
@@ -27,8 +29,16 @@ export default function TopBar({ neighbourhood = 'Nairobi' }: TopBarProps) {
         }}>
           Sote
         </div>
-        <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '1px' }}>
-          📍 {neighbourhood} · 3km radius
+        <div style={{
+          fontSize: '12px',
+          color: 'var(--muted)',
+          marginTop: '1px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '3px',
+        }}>
+          <MapPin size={11} strokeWidth={2.5} />
+          {neighbourhood} · 3km radius
         </div>
       </div>
       <div style={{ display: 'flex', gap: '8px' }}>
@@ -37,20 +47,23 @@ export default function TopBar({ neighbourhood = 'Nairobi' }: TopBarProps) {
           background: 'var(--cream)',
           border: '1px solid var(--border)',
           borderRadius: '10px',
-          fontSize: '18px',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>🔍</button>
+          color: 'var(--ink2)',
+        }}>
+          <Search size={17} strokeWidth={2} />
+        </button>
         <button style={{
           width: '38px', height: '38px',
           background: 'var(--cream)',
           border: '1px solid var(--border)',
           borderRadius: '10px',
-          fontSize: '18px',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          position: 'relative',
-        }}>🔔</button>
+          color: 'var(--ink2)',
+        }}>
+          <Bell size={17} strokeWidth={2} />
+        </button>
       </div>
     </header>
   )

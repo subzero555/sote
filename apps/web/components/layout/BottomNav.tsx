@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Home, ArrowLeftRight, Plus, Heart, User } from 'lucide-react'
 
 const tabs = [
-  { href: '/feed',    icon: '🏠', label: 'Home' },
-  { href: '/barter',  icon: '🔄', label: 'Barter' },
-  { href: '/post',    icon: null,  label: 'Post' },
-  { href: '/give',    icon: '💜', label: 'Give' },
-  { href: '/profile', icon: '👤', label: 'Profile' },
+  { href: '/feed',    icon: Home,            label: 'Home' },
+  { href: '/barter',  icon: ArrowLeftRight,  label: 'Barter' },
+  { href: '/post',    icon: null,            label: 'Post' },
+  { href: '/give',    icon: Heart,           label: 'Give' },
+  { href: '/profile', icon: User,            label: 'Profile' },
 ]
 
 export default function BottomNav() {
@@ -17,7 +18,8 @@ export default function BottomNav() {
   return (
     <nav style={{
       position: 'fixed',
-      bottom: 0, left: '50%',
+      bottom: 0,
+      left: '50%',
       transform: 'translateX(-50%)',
       width: '100%',
       maxWidth: '480px',
@@ -31,28 +33,27 @@ export default function BottomNav() {
     }}>
       {tabs.map((tab) => {
         const isActive = pathname.startsWith(tab.href)
+        const Icon = tab.icon
 
-        if (!tab.icon) {
+        if (!Icon) {
           return (
-            <Link key={tab.href} href={tab.href} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '50px',
-              height: '50px',
-              background: 'linear-gradient(135deg, var(--green), var(--green-mid))',
-              borderRadius: '14px',
-              fontSize: '24px',
-              color: 'white',
-              marginTop: '-16px',
-              boxShadow: '0 4px 20px rgba(28,107,58,0.4)',
-              textDecoration: 'none',
-              flex: '0 0 auto',
-              margin: '0 auto',
-              marginTop: '-16px',
-            }}>
-              ＋
-            </Link>
+            <div key={tab.href} style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <Link href={tab.href} style={{
+                width: '50px',
+                height: '50px',
+                background: 'linear-gradient(135deg, var(--green), var(--green-mid))',
+                borderRadius: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: '-16px',
+                boxShadow: '0 4px 20px rgba(28,107,58,0.4)',
+                textDecoration: 'none',
+                color: 'white',
+              }}>
+                <Plus size={24} strokeWidth={2.5} />
+              </Link>
+            </div>
           )
         }
 
@@ -65,14 +66,14 @@ export default function BottomNav() {
             gap: '3px',
             textDecoration: 'none',
             padding: '4px 0',
+            color: isActive ? 'var(--green)' : 'var(--muted)',
           }}>
-            <span style={{ fontSize: '20px' }}>{tab.icon}</span>
+            <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
             <span style={{
               fontSize: '9px',
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.3px',
-              color: isActive ? 'var(--green)' : 'var(--muted)',
             }}>
               {tab.label}
             </span>

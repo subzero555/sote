@@ -10,8 +10,8 @@ const app = express()
 app.use(helmet())
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://sote.kenyaproductindex.co.ke']
-    : ['http://localhost:3001'],
+    ? ['https://sote.kenyaproductindex.co.ke', 'https://sote.app']
+    : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
 }))
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }))
