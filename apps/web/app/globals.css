@@ -4,29 +4,33 @@
 
 @layer base {
   :root {
-    --green:        #1c6b3a;
-    --green-mid:    #2d9e57;
-    --green-light:  #a8e6c1;
-    --green-pale:   #e8f5ed;
-    --gold:         #c8860a;
-    --gold-light:   #f5c842;
-    --gold-pale:    #fdf3e0;
-    --cream:        #f7f3ee;
-    --ink:          #1a1510;
-    --ink2:         #3d3530;
-    --muted:        #9a8878;
-    --border:       #e2d9cf;
-    --white:        #ffffff;
-    --red:          #c0392b;
-    --warm:         #e8621a;
-    --warm-pale:    #fdeee6;
-    --purple:       #7b2d8b;
-    --purple-pale:  #f3e8fb;
-    --teal:         #0e7490;
-    --teal-pale:    #e0f2f7;
-    --barter:       #b45309;
-    --barter-pale:  #fef3c7;
-    --barter-mid:   #d97706;
+    --navy:        #0f1f3d;
+    --navy-mid:    #1a3158;
+    --navy-light:  #2a4a7a;
+    --navy-pale:   #e8edf8;
+    --gold:        #c8860a;
+    --gold-mid:    #e09b12;
+    --gold-light:  #f5c842;
+    --gold-pale:   #fdf3e0;
+    --cream:       #faf9f6;
+    --white:       #ffffff;
+    --ink:         #0f1f3d;
+    --ink2:        #3d4f6b;
+    --muted:       #7a8ba8;
+    --border:      #e2e8f4;
+    --barter:      #b45309;
+    --barter-pale: #fef3c7;
+    --gift:        #7b2d8b;
+    --gift-pale:   #f3e8fb;
+    --donate:      #c0392b;
+    --donate-pale: #fdeee6;
+    --meal:        #0e7490;
+    --meal-pale:   #e0f2f7;
+    --red:         #c0392b;
+    --green:       #1a6b3a;
+    --green-pale:  #e8f5ed;
+    --shadow:      0 4px 24px rgba(15,31,61,0.10);
+    --shadow-sm:   0 2px 12px rgba(15,31,61,0.07);
   }
 
   html { scroll-behavior: smooth; }
@@ -34,12 +38,11 @@
   body {
     background: var(--cream);
     color: var(--ink);
-    font-family: var(--font-epilogue), sans-serif;
+    font-family: var(--font-epilogue), -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     max-width: 480px;
     margin: 0 auto;
     min-height: 100vh;
-    position: relative;
   }
 }

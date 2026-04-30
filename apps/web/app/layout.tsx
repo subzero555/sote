@@ -11,7 +11,7 @@ const fraunces = Fraunces({
 const epilogue = Epilogue({
   subsets: ['latin'],
   variable: '--font-epilogue',
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -21,14 +21,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1c6b3a',
+  themeColor: '#0f1f3d',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${epilogue.variable}`}>
       <body>{children}</body>
