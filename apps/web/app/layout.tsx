@@ -18,14 +18,13 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Sote — You are not a stranger here.',
-  description: "Kenya's hyperlocal neighbourhood trust marketplace.",
+  description: "Kenya's hyperlocal neighbourhood trust marketplace. Trade, barter, gift, donate and share meals within 3km of home.",
 }
 
 export const viewport: Viewport = {
   themeColor: '#1C1028',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

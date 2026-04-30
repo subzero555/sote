@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Phone, ArrowRight, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { Phone, ArrowRight, Loader2, Shield, Star, Users } from 'lucide-react'
 import { api } from '@/lib/api'
 
 export default function AuthPage() {
@@ -12,18 +13,13 @@ export default function AuthPage() {
   const [error, setError] = useState('')
 
   function formatPhone(value: string) {
-    const digits = value.replace(/\D/g, '')
-    return digits.slice(0, 10)
+    return value.replace(/\D/g, '').slice(0, 10)
   }
 
   async function handleSubmit() {
     setError('')
     const normalized = phone.startsWith('0') ? phone : '0' + phone
-    if (normalized.length !== 10) {
-      setError('Enter a valid 10-digit Kenyan number')
-      return
-    }
-
+    if (normalized.length !== 10) { setError('Enter a valid 10-digit Kenyan number'); return }
     setLoading(true)
     try {
       await api.requestOtp(normalized)
@@ -37,164 +33,126 @@ export default function AuthPage() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'var(--cream)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '0 24px',
-    }}>
-      {/* Header */}
-      <div style={{ paddingTop: '80px', marginBottom: '48px' }}>
-        <div style={{
-          fontFamily: 'var(--font-fraunces)',
-          fontSize: '48px',
-          fontWeight: 900,
-          color: 'var(--green)',
-          lineHeight: 1,
-          marginBottom: '12px',
-        }}>
-          Sote
-        </div>
-        <div style={{
-          fontFamily: 'var(--font-fraunces)',
-          fontSize: '26px',
-          fontWeight: 400,
-          fontStyle: 'italic',
-          color: 'var(--ink2)',
-          marginBottom: '10px',
-        }}>
-          All of us, together.
-        </div>
-        <div style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7 }}>
-          Kenya's neighbourhood marketplace — trade, barter, gift and share within 3km of home.
-        </div>
-      </div>
+    <div style={{ minHeight: '100vh', background: 'var(--cream)', display: 'flex', fontFamily: 'var(--font-inter)' }}>
 
-      {/* Form */}
+      {/* Left — branding panel */}
       <div style={{
-        background: '#ffffff',
-        borderRadius: '20px',
-        padding: '28px 24px',
-        border: '1px solid var(--border)',
-        boxShadow: '0 4px 24px rgba(26,21,16,0.08)',
+        width: '50%', background: 'var(--ink)',
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', padding: '80px 72px',
+        position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{
-          fontFamily: 'var(--font-fraunces)',
-          fontSize: '20px',
-          fontWeight: 700,
-          marginBottom: '6px',
-        }}>
-          Enter your number
-        </div>
-        <div style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '20px' }}>
-          We'll send a verification code via SMS
-        </div>
+        {/* Background decoration */}
+        <div style={{ position: 'absolute', width: '400px', height: '400px', background: 'rgba(91,33,182,0.15)', borderRadius: '50%', top: '-100px', right: '-100px' }} />
+        <div style={{ position: 'absolute', width: '300px', height: '300px', background: 'rgba(91,33,182,0.08)', borderRadius: '50%', bottom: '-80px', left: '-60px' }} />
 
-        {/* Phone input */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          border: '1.5px solid',
-          borderColor: error ? 'var(--red)' : 'var(--border)',
-          borderRadius: '12px',
-          padding: '14px 16px',
-          marginBottom: '12px',
-          background: 'var(--cream)',
-          transition: 'border-color 0.2s',
-        }}>
-          <Phone size={18} color="var(--muted)" strokeWidth={1.8} />
-          <span style={{
-            fontSize: '15px',
-            fontWeight: 600,
-            color: 'var(--ink2)',
-            paddingRight: '8px',
-            borderRight: '1.5px solid var(--border)',
-          }}>
-            +254
-          </span>
-          <input
-            type="tel"
-            placeholder="0712 345 678"
-            value={phone}
-            onChange={(e) => setPhone(formatPhone(e.target.value))}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            style={{
-              flex: 1,
-              border: 'none',
-              background: 'transparent',
-              fontSize: '16px',
-              fontFamily: 'var(--font-epilogue)',
-              color: 'var(--ink)',
-              outline: 'none',
-            }}
-          />
-        </div>
-
-        {error && (
-          <div style={{
-            fontSize: '13px',
-            color: 'var(--red)',
-            marginBottom: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}>
-            {error}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Link href="/feed" style={{ textDecoration: 'none' }}>
+            <div style={{ fontFamily: 'var(--font-syne)', fontSize: '48px', fontWeight: 800, color: 'var(--violet-light)', letterSpacing: '-2px', lineHeight: 1, marginBottom: '8px' }}>
+              Sote
+            </div>
+          </Link>
+          <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic', marginBottom: '48px' }}>
+            You are not a stranger here.
           </div>
-        )}
 
-        <button
-          onClick={handleSubmit}
-          disabled={loading || phone.length < 9}
-          style={{
-            width: '100%',
-            padding: '16px',
-            background: loading || phone.length < 9 ? 'var(--border)' : 'var(--green)',
-            color: loading || phone.length < 9 ? 'var(--muted)' : 'white',
-            border: 'none',
-            borderRadius: '12px',
-            fontFamily: 'var(--font-fraunces)',
-            fontSize: '16px',
-            fontWeight: 700,
-            cursor: loading || phone.length < 9 ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            transition: 'all 0.2s',
-          }}
-        >
-          {loading ? (
-            <Loader2 size={18} strokeWidth={2} style={{ animation: 'spin 1s linear infinite' }} />
-          ) : (
-            <>
-              Get verification code
-              <ArrowRight size={18} strokeWidth={2.5} />
-            </>
-          )}
-        </button>
+          <div style={{ fontFamily: 'var(--font-syne)', fontSize: '32px', fontWeight: 700, color: 'white', lineHeight: 1.2, marginBottom: '20px' }}>
+            Kenya's neighbourhood trust marketplace
+          </div>
+          <div style={{ fontSize: '16px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, marginBottom: '48px' }}>
+            Trade, barter, gift, donate and share meals — safely within 3km of home, with verified neighbours.
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {[
+              { Icon: Shield, title: 'Phone Verified', sub: 'Every user verified with their Kenyan number' },
+              { Icon: Star,   title: 'Trust Scores',   sub: 'Reputation built through every exchange'     },
+              { Icon: Users,  title: 'Safe Meetups',   sub: 'Meet at verified community safe spots'       },
+            ].map(item => {
+              const Icon = item.Icon
+              return (
+                <div key={item.title} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(91,33,182,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={18} color="var(--violet-light)" strokeWidth={2} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 600, color: 'white', marginBottom: '3px' }}>{item.title}</div>
+                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>{item.sub}</div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Footer note */}
-      <div style={{
-        marginTop: '24px',
-        fontSize: '12px',
-        color: 'var(--muted)',
-        textAlign: 'center',
-        lineHeight: 1.6,
-      }}>
-        By continuing you agree to Sote's terms of service.{' '}
-        Your number is never shared with other users.
+      {/* Right — form */}
+      <div style={{ width: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 72px' }}>
+        <div style={{ width: '100%', maxWidth: '400px' }}>
+          <div style={{ fontFamily: 'var(--font-syne)', fontSize: '28px', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>
+            Welcome back
+          </div>
+          <div style={{ fontSize: '15px', color: 'var(--muted)', marginBottom: '40px' }}>
+            Enter your phone number to sign in or create an account
+          </div>
+
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink2)', display: 'block', marginBottom: '8px' }}>
+              Phone number
+            </label>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              border: `1.5px solid ${error ? 'var(--red)' : 'var(--border)'}`,
+              borderRadius: '12px', padding: '14px 16px',
+              background: 'var(--white)',
+              transition: 'border-color 0.2s',
+            }}>
+              <Phone size={18} color="var(--muted)" strokeWidth={1.8} />
+              <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ink2)', paddingRight: '12px', borderRight: '1.5px solid var(--border)' }}>+254</span>
+              <input
+                type="tel"
+                placeholder="0712 345 678"
+                value={phone}
+                onChange={e => setPhone(formatPhone(e.target.value))}
+                onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+                style={{
+                  flex: 1, border: 'none', background: 'transparent',
+                  fontSize: '16px', fontFamily: 'var(--font-inter)',
+                  color: 'var(--ink)', outline: 'none',
+                }}
+              />
+            </div>
+            {error && <div style={{ fontSize: '13px', color: 'var(--red)', marginTop: '8px' }}>{error}</div>}
+          </div>
+
+          <button
+            onClick={handleSubmit}
+            disabled={loading || phone.length < 9}
+            style={{
+              width: '100%', padding: '16px',
+              background: loading || phone.length < 9 ? 'var(--border)' : 'var(--violet)',
+              color: loading || phone.length < 9 ? 'var(--muted)' : 'white',
+              border: 'none', borderRadius: '12px',
+              fontFamily: 'var(--font-syne)', fontSize: '16px', fontWeight: 700,
+              cursor: loading || phone.length < 9 ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              boxShadow: loading || phone.length < 9 ? 'none' : '0 8px 24px rgba(91,33,182,0.35)',
+              transition: 'all 0.2s',
+            }}
+          >
+            {loading
+              ? <Loader2 size={18} strokeWidth={2} style={{ animation: 'spin 1s linear infinite' }} />
+              : <><ArrowRight size={18} strokeWidth={2.5} /> Get verification code</>
+            }
+          </button>
+
+          <div style={{ marginTop: '24px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, textAlign: 'center' }}>
+            By continuing you agree to Sote's terms of service. Your number is never shared with other users.
+          </div>
+        </div>
       </div>
 
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+      <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
     </div>
   )
 }
