@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit'
 import authRoutes from './routes/auth.routes'
 import listingsRoutes from './routes/listings.routes'
 import exchangesRoutes from './routes/exchanges.routes'
+import uploadRoutes from './routes/upload.routes'
 
 const app = express()
 
@@ -16,7 +17,8 @@ app.use(cors({
   credentials: true,
 }))
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }))
-app.use(express.json({ limit: '10mb' }))
+app.use(express.json({ limit: '20mb' }))
+app.use(express.urlencoded({ extended: true, limit: '20mb' }))
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/health', (_req, res) => {
@@ -26,6 +28,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/listings', listingsRoutes)
 app.use('/api/exchanges', exchangesRoutes)
+app.use('/api/upload', uploadRoutes)
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Route not found' })

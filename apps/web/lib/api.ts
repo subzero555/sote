@@ -66,6 +66,8 @@ export const api = {
   deleteListing: (id: string) =>
     apiFetch(`/api/listings/${id}`, { method: 'DELETE' }),
 
+  getMyListings: () => apiFetch('/api/listings/mine'),
+
   // Exchanges
   createExchange: (data: {
     listingId: string
@@ -85,4 +87,39 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     }),
+
+  // Upload — uses FormData, not JSON
+  uploadListingImage: async (file: File): Promise<{ url: string }> => {
+    const token = typeof window !== 'undefined'
+      ? localStorage.getItem('sote_token') : null
+    const formData = new FormData()
+    formData.append('image', file)
+    const res = await fetch(`${API_URL}/api/upload/listing`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Upload failed' }))
+      throw new Error(err.error || 'Upload failed')
+    }
+    return res.json()
+  },
+
+  uploadAvatar: async (file: File): Promise<{ url: string }> => {
+    const token = typeof window !== 'undefined'
+      ? localStorage.getItem('sote_token') : null
+    const formData = new FormData()
+    formData.append('image', file)
+    const res = await fetch(`${API_URL}/api/upload/avatar`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Upload failed' }))
+      throw new Error(err.error || 'Upload failed')
+    }
+    return res.json()
+  },
 }

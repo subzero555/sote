@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useState } from 'react'
+import ImageUpload from '@/components/ui/ImageUpload'
 import { useRouter } from 'next/navigation'
 import {
   ShoppingCart, ArrowLeftRight, Gift, Heart, UtensilsCrossed,
@@ -29,6 +30,7 @@ export default function PostPage() {
   const [step, setStep] = useState<'mode' | 'details'>('mode')
   const [mode, setMode] = useState('')
   const [loading, setLoading] = useState(false)
+  const [images, setImages] = useState<string[]>([])
   const [success, setSuccess] = useState(false)
   const [form, setForm] = useState({
     title: '', description: '', category: '', price: '',
@@ -45,12 +47,14 @@ export default function PostPage() {
     setLoading(true)
     try {
       const payload: Record<string, unknown> = {
-        mode, title: form.title,
-        description: form.description || undefined,
-        category: form.category,
-        neighbourhood: form.neighbourhood || undefined,
-        meetupHint: form.meetupHint || undefined,
-      }
+  mode,
+  title: form.title,
+  description: form.description || undefined,
+  category: form.category,
+  images, // ← add this line
+  neighbourhood: form.neighbourhood || undefined,
+  meetupHint: form.meetupHint || undefined,
+}
       if (mode === 'TRADE') payload.price = parseFloat(form.price)
       if (mode === 'BARTER') payload.wantedItem = form.wantedItem
       if (mode === 'MEAL') {
@@ -200,6 +204,18 @@ export default function PostPage() {
               {selectedMode.label}
             </span>
           </div>
+          {/* Photos */}
+<div>
+  <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink2)', display: 'block', marginBottom: '8px' }}>
+    Photos
+  </label>
+  <ImageUpload
+    images={images}
+    onUpload={(url) => setImages(prev => [...prev, url])}
+    onRemove={(url) => setImages(prev => prev.filter(u => u !== url))}
+    maxImages={4}
+  />
+</div>
 
           {/* Title */}
           <div>

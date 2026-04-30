@@ -115,19 +115,42 @@ export default function ListingDetailPage() {
         </div>
       </div>
 
-      {/* Image area */}
+      {/* Images */}
+{listing.images && listing.images.length > 0 ? (
+  <div style={{ position: 'relative' }}>
+    <img
+      src={listing.images[0]}
+      alt={listing.title}
+      style={{ width: '100%', height: '260px', objectFit: 'cover' }}
+    />
+    {listing.images.length > 1 && (
       <div style={{
-        width: '100%', height: '220px',
-        background: cfg.pale,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        position: 'relative',
+        position: 'absolute', bottom: '12px', right: '12px',
+        background: 'rgba(26,21,16,0.65)', borderRadius: '50px',
+        padding: '4px 10px', fontSize: '12px', color: 'white', fontWeight: 600,
       }}>
-        <Icon size={72} color={cfg.color} strokeWidth={1} />
-        <div style={badgeStyle}>
-          <Icon size={12} strokeWidth={2.5} />
-          {cfg.label}
-        </div>
+        1 / {listing.images.length}
       </div>
+    )}
+    <div style={badgeStyle}>
+      <Icon size={12} strokeWidth={2.5} />
+      {cfg.label}
+    </div>
+  </div>
+) : (
+  <div style={{
+    width: '100%', height: '220px',
+    background: cfg.pale,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    position: 'relative',
+  }}>
+    <Icon size={72} color={cfg.color} strokeWidth={1} />
+    <div style={badgeStyle}>
+      <Icon size={12} strokeWidth={2.5} />
+      {cfg.label}
+    </div>
+  </div>
+)}
 
       {/* Content */}
       <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
